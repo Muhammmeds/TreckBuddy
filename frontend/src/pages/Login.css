@@ -1,0 +1,69 @@
+.container3{
+    background-color: #383632;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container4{
+    background-color: 	#696969;
+    height: 300px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px 10px 15px 10px;
+    color: white;
+}
+
+.container4 .header{
+    font-weight: 900;
+    margin-top: 40px;
+    margin-bottom: -3px;
+    font-size: 30px;
+}
+
+.container4 :nth-child(2){
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.container4 input {
+    color: white;
+    border: none;
+    background-color: gray;
+    width: 90%;
+    height: 40px;
+    border-radius: 3px;
+    padding-left: 15px;
+    cursor: pointer;
+
+
+}
+
+.container4 input::placeholder{
+    color: gainsboro;
+}
+
+.container4 input:focus{
+    outline: none;
+}
+
+.container4 button{
+    width: 95%;
+    height: 40px;
+    background-color: #383632;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-weight: bold;
+    transition: 0.3s ease-in-out;
+}
+
+.container4 button:hover{
+    transform: scale(1.05);
+}

@@ -1,0 +1,118 @@
+.container1{
+    background-color: #383632;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container2{
+    background-color: 	hsl(0, 0%, 41%);
+    min-height: 500px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px 10px 15px 10px;
+    color: white;
+}
+
+.container2 .header{
+    font-weight: 900;
+    margin-top: 40px;
+    margin-bottom: -10px;
+    font-size: 30px;
+}
+
+.container2 :nth-child(2){
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.container2 .select{
+    align-self: flex-start;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 5px;
+}
+.select label{
+    margin-left: 8px;
+    color: gainsboro;
+
+}
+.select select:focus{
+    outline: none;
+}
+.select select{
+    margin-right: 10px;
+    border-radius: 5px;
+    width: 80%;
+    height: 30px;
+    color: white;
+    background-color: gray;
+    
+}
+
+.select select option{
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.container2 .already{
+    margin-left: 10px;
+    color: gainsboro;
+    font-size: 12px;
+    margin-top: -10px;
+    font-weight: 700;
+    word-spacing: 1px;
+    align-self: flex-start;
+}
+
+.container2 input {
+    color: white;
+    border: none;
+    background-color: gray;
+    width: 90%;
+    height: 40px;
+    border-radius: 3px;
+    padding-left: 15px;
+    cursor: pointer;
+}
+
+.container2 input::placeholder{
+    color: gainsboro;
+}
+
+.container2 input:focus{
+    outline: none;
+}
+
+.container2 button{
+    width: 95%;
+    height: 40px;
+    background-color: #383632;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: 0.3s ease-in-out;
+}
+
+.container2 button:hover{
+    transform: scale(1.05);
+}
+
+.container2 a{
+    text-decoration: none;
+    transition: 0.3s ease-in;
+    margin-left: 2px;
+}
+
+.container2 a:hover{
+    text-decoration: underline;
+}
