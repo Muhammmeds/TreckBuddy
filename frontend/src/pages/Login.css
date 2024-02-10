@@ -1,6 +1,6 @@
 .container3{
     background-color: #383632;
-    height: 700px;
+    min-height: 700px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +8,7 @@
 
 .container4{
     background-color: 	#696969;
-    height: 300px;
+    min-height: 300px;
     width: 20%;
     display: flex;
     flex-direction: column;
@@ -62,8 +62,15 @@
     border-radius: 3px;
     font-weight: bold;
     transition: 0.3s ease-in-out;
+    text-align: center;
 }
 
 .container4 button:hover{
     transform: scale(1.05);
+}
+
+.error{
+    font-size: 15px;
+    color: #F01F17;
+    font-weight: 600;
 }

@@ -1,0 +1,24 @@
+.container5{
+    background-color: #383632;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container6{
+    background-color: 	#696969;
+    height: 100px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px 10px 15px 10px;
+    color: white;
+}
+.container6 a{
+    font-size: 20px;
+    font-weight: bold;
+}
