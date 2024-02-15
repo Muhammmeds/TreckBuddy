@@ -9,11 +9,12 @@ import { faUser,faPlus , faShareFromSquare,faUsers , faMessage , faLocationDot ,
 
 const UserData = () =>{
     const [user , setUser] = useState(null)
-    const [journey , setJourney] = useState(null)
+    const [journey , setJourney] = useState([])
     const [to , setTo] = useState('')
     const [leavingtime , setLeavingTime] = useState('')
     const [note , setNote] = useState('')
     const [error , setError] = useState('')
+    const [createjourney , setCreateJourney] = useState(false)
 
 
     const navigate = useNavigate()
@@ -119,6 +120,15 @@ const UserData = () =>{
 
     }
 
+    const showjourney = () =>{
+        if(!createjourney){
+            setCreateJourney(true)
+        }else{
+            setCreateJourney(false)
+
+        }
+    }
+
     const deleteJourney = (id) =>{
         let token = localStorage.getItem('token')
 
@@ -152,11 +162,12 @@ const UserData = () =>{
         <div className='top4'>
         <div className='sidebar'>
             <div className='slidebarinner1'>
-                <p>profile</p>
-                <FontAwesomeIcon icon={faPlus} className='plus' />
+                <p>Profile</p>
+                <p onClick={showjourney}><FontAwesomeIcon icon={faPlus} className='plus' /></p>
                 <p>Create Journey</p>
             </div>
-            <div className='form'>
+            {createjourney && <div className='form'>
+            <FontAwesomeIcon className='formlocationlogo'  icon={faLocationDot}/> <br></br>
                 <input type='text' placeholder='to' value={to} onChange={(e)=>{setTo(e.target.value)}} /> <br></br>
                 <p>leavingtime:</p>
                 <input type='time' value={leavingtime} onChange={(e)=>{setLeavingTime(e.target.value)}} /> <br></br>
@@ -166,14 +177,14 @@ const UserData = () =>{
                 <p className='error'>{error}</p>
                 <button onClick={createJourney}>Create Journey</button>
 
-            </div>
+            </div>}
         </div>
         <div className='top5'>
-        { journey ? journey.map((journey, index)=>(
-            <>
+        { journey.length > 0 ? journey.map((journey, index)=>(
+            
             <div key={index} className='top6'>
                 <div className='location'>
-                    <div className='locationfirstcontainer'>
+                    <div  className='locationfirstcontainer'>
                         <FontAwesomeIcon className='locationlogo'  icon={faLocationDot}/>
                         <p>{journey.to}</p>
                     </div>
@@ -202,8 +213,7 @@ const UserData = () =>{
                 </div>
 
             </div>
-            </>
-        )) : <p>NO Journey available</p>}
+        )) : <p className='nojourney'>No journey available</p>}
         </div>
         </div>
         </>

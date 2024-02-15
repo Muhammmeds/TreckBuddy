@@ -16,6 +16,7 @@ const generateToken = (id) =>{
     return jwt.sign({id}, process.env.SECRET_KEY , {expiresIn : '30d'})
 }
 
+
 mongoose.connect(process.env.db)
 .then(()=>{
     app.listen(process.env.PORT , ()=>{
@@ -43,8 +44,11 @@ const within30Minutes = (time) => {
 
 //get all journey
 app.get('/api/alljourney',protect, async (req,res)=>{
+
     const journey = await Journey.find().sort({createdAt : -1})
+    
     res.status(200).json(journey)
+    
 })
 
 //get a user
@@ -67,12 +71,17 @@ app.patch('/api/peoplejoined/:id', protect , async (req,res)=>{
 
 
     const journey = await Journey.findById(id)
-    if(journey.peoplejoined.includes(userid)){
-        res.status(200).json('journey has been joined')
-    }else{
+    const userJourney = await Journey.findOne({userid})
+    const user = await JourneyUser.findById(userid)
+
+    if(journey.peoplejoined.includes(userid) || user.acceptedajourney || userJourney){
+        res.status(400).json('A journey has been joined or created')
+    }
+    else{
     const update = await Journey.findByIdAndUpdate(id , {$push : {peoplejoined : userid}}, {new : true})
     let number = update.peoplejoined.length
-    const update2 = await Journey.findByIdAndUpdate(id , {$set : {numberofpeoplejoined : number }})
+    const update2 = await Journey.findByIdAndUpdate(id , {$set : {numberofpeoplejoined : number }}, {new : true})
+    const update3 = await JourneyUser.findByIdAndUpdate(userid , {$set : {acceptedajourney : true}}, {new : true})
     const journeys = await Journey.find().sort({createdAt : -1})
     res.status(200).json(journeys)
 }})
@@ -82,20 +91,34 @@ app.patch('/api/leavejourney/:id',protect , async(req,res)=>{
     const id = req.params.id
     const userid = req.user.id
 
+    const user = await JourneyUser.findById(userid)
     const journey = await Journey.findById(id)
     const update = await Journey.findByIdAndUpdate(id , {$pull : {peoplejoined : userid}},{new : true})
     let number = update.peoplejoined.length
-    const update2 = await Journey.findByIdAndUpdate(id , {$set : {numberofpeoplejoined : number }})
+    const update2 = await Journey.findByIdAndUpdate(id , {$set : {numberofpeoplejoined : number }},{new : true})
+    const update3 = await JourneyUser.findByIdAndUpdate(userid , {$set : {acceptedajourney : false}}, {new : true})
     const journeys = await Journey.find().sort({createdAt : -1})
     res.status(200).json(journeys)
 })
 
 //delete a journey
 app.delete('/api/journey/:id', protect , async (req,res)=>{
+
     const id = req.params.id
+
     const journey = await Journey.findByIdAndDelete(id)
+    let arr = journey.peoplejoined
+    if(arr.length > 0){
+    for(let i = 0;i<arr.length;i++){
+        const update = await JourneyUser.findByIdAndUpdate(arr[i] , {$set : {acceptedajourney : false}})
+    }
+    
     const journeys = await Journey.find().sort({createdAt : -1})
     res.status(200).json(journeys)
+    }else{
+        const journeys = await Journey.find().sort({createdAt : -1})
+        res.status(200).json(journeys) 
+    }
 })
 
 
@@ -106,10 +129,10 @@ app.post('/api/journey', protect , async(req,res)=>{
     const age = req.user.age
     const gender = req.user.gender
 
-
+    const user = await JourneyUser.findById(id)
     const exist = await Journey.findOne({userid : id})
 
-    if(exist){
+    if(exist || user.acceptedajourney){
         res.status(400).json('You have an existing journey')
     }else{
         const {to , leavingtime , note} = req.body

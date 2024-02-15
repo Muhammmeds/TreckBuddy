@@ -20,10 +20,10 @@ const journeyUserModel = new Schema({
         type : String,
         required : true,
     },
-    // acceptedajourney : {
-    //     type : Boolean,
-    //     required : true
-    // }
+    acceptedajourney : {
+        type : Boolean,
+        required : true
+    }
 },{timestamps : true})
 
 module.exports = mongoose.model('journeyUser' , journeyUserModel)
