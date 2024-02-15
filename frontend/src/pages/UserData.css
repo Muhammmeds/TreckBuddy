@@ -1,0 +1,211 @@
+.top{
+    background-color: black;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 30px;
+    color: white;
+}
+
+.top button{
+    text-align: center;
+    width: 80px;
+    height: 30px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    font-weight: 600;
+    border: none;
+}
+
+.top button:hover{
+    transform: scale(1.2);
+}
+
+.top2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    /* border: 2px solid white; */
+}
+.user{
+    font-size: 30px;
+}
+.top2{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.top3 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    /* border: 2px solid white; */
+}
+
+.add{
+    margin-right: 50px;
+    font-size: 30px;
+}
+
+.top4{
+    min-height: 70px ;
+    /* border: 2px solid black; */
+    display: flex;
+    box-sizing: border-box;
+
+}
+.sidebar{
+    width: 30%;
+    min-height: 800px;
+    background-color:   black;
+    /* border: 2px solid red; */
+    color: white;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+.top5{
+    width: 70%;
+    box-sizing: border-box;
+    min-height: 500px;
+    /* border: 2px solid black; */
+
+}
+.slidebarinner1 .plus{
+    font-size: 50px;
+    margin-top: 20px;
+    margin-bottom: -10px;
+    transition: all 0.3s ease-in;
+}
+
+.slidebarinner1 .plus:hover{
+    transform: scale(1.2);
+}
+
+.slidebarinner1 :nth-child(3){
+    font-size: 10px;
+}
+
+.form {
+    border : 2px solid white;
+    min-height: 300px;
+    margin-top: 20px;
+    width: 80%;
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+}
+
+.top6{
+    width: 70%;
+    min-height: 80px;
+    margin: 40px auto;
+    box-shadow: 5px 5px 25px gray;
+    border-left: 45px solid #00a35c;
+    padding-left: 30px;
+    border-radius: 10px;
+}
+.location{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 30px;
+}
+
+.locationfirstcontainer{
+    width: 25%;
+    display: flex;
+     align-items: center;
+}
+
+.location button{
+    width: 75px;
+    text-align: center;
+    font-weight: 600;
+    height: 30px;
+    border-radius: 50px;
+    background-color: black;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.location button:hover{
+    transform: scale(1.1);
+}
+
+.locationfirstcontainer .locationlogo {
+    font-size: 40px;
+}
+
+.locationfirstcontainer p{
+    margin-left: 10px;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.leavingtime{
+    display: flex;
+    align-items: center;
+    padding-left: 45px;
+}
+.leavingtime p{
+    margin-left: 10px;
+}
+.info{
+    display: flex;
+    align-items: center;
+    padding-left: 45px;
+}
+.info p{
+    margin-left: 10px ;
+}
+.info .personwalking{
+    font-size: 25px;
+}
+.form{
+    min-height: 300px;
+}
+.form .error{
+    color: red;
+    font-size: 10px;
+}
+.note{
+    display: flex;
+    align-items: center;
+    padding-left: 45px;
+}
+.note p{
+    margin-left: 10px;
+}
+
+.delete{
+    font-size: 30px;
+    transition: all 0.3s ease-in-out;
+}
+
+.delete:hover{
+    transform: scale(1.2);
+}
+
+
+.peoplejoined{
+    display: flex;
+    align-items: center;
+    padding-left: 45px;
+}
+
+.peoplejoined p{
+    margin-left: 10px;
+    font-weight: 700;
+    font-size: 18px;
+}

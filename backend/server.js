@@ -5,6 +5,7 @@ const JourneyUser = require('./models/journeyUserModel')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const protect = require('./authentication')
 
 
 const app = express()
@@ -40,25 +41,96 @@ const within30Minutes = (time) => {
     }
 }
 
+//get all journey
+app.get('/api/alljourney',protect, async (req,res)=>{
+    const journey = await Journey.find().sort({createdAt : -1})
+    res.status(200).json(journey)
+})
 
-app.get('/api/journey', (req,res)=>{
-    res.status(200).json('working')
+//get a user
+app.get('/api/users', protect , async (req,res)=>{
+    let user = req.user
+    res.status(200).json(user)
+})
+
+//get each user all journey
+app.get('/api/eachuserjourney',protect, async (req,res)=>{
+    const id = req.user.id
+    const journey = await Journey.find({userid : id}).sort({createdAt : -1})
+    res.status(200).json(journey)
+})
+
+// people joined
+app.patch('/api/peoplejoined/:id', protect , async (req,res)=>{
+    const userid = req.user.id
+    const id = req.params.id
+
+
+    const journey = await Journey.findById(id)
+    if(journey.peoplejoined.includes(userid)){
+        res.status(200).json('journey has been joined')
+    }else{
+    const update = await Journey.findByIdAndUpdate(id , {$push : {peoplejoined : userid}}, {new : true})
+    let number = update.peoplejoined.length
+    const update2 = await Journey.findByIdAndUpdate(id , {$set : {numberofpeoplejoined : number }})
+    const journeys = await Journey.find().sort({createdAt : -1})
+    res.status(200).json(journeys)
+}})
+
+//leave a journey
+app.patch('/api/leavejourney/:id',protect , async(req,res)=>{
+    const id = req.params.id
+    const userid = req.user.id
+
+    const journey = await Journey.findById(id)
+    const update = await Journey.findByIdAndUpdate(id , {$pull : {peoplejoined : userid}},{new : true})
+    let number = update.peoplejoined.length
+    const update2 = await Journey.findByIdAndUpdate(id , {$set : {numberofpeoplejoined : number }})
+    const journeys = await Journey.find().sort({createdAt : -1})
+    res.status(200).json(journeys)
+})
+
+//delete a journey
+app.delete('/api/journey/:id', protect , async (req,res)=>{
+    const id = req.params.id
+    const journey = await Journey.findByIdAndDelete(id)
+    const journeys = await Journey.find().sort({createdAt : -1})
+    res.status(200).json(journeys)
 })
 
 
 //create a journey
-app.post('/api/journey' , async(req,res)=>{
-    const {to , leavingtime , note} = req.body
-    if(to == ''||leavingtime == ''||note == ''){
-        res.status(400).json({message : 'all field is required'})
-    }
-    let result = within30Minutes(leavingtime)
-    if(!result){
-        res.status(400).json({message : 'leaving time must be within 30 minutes'})
-    }
+app.post('/api/journey', protect , async(req,res)=>{
+    const username = req.user.username
+    const id = req.user.id
+    const age = req.user.age
+    const gender = req.user.gender
 
-    const journey = await Journey.create({to,leavingtime,note})
-    res.status(200).json(journey)
+
+    const exist = await Journey.findOne({userid : id})
+
+    if(exist){
+        res.status(400).json('You have an existing journey')
+    }else{
+        const {to , leavingtime , note} = req.body
+        if(to == ''||leavingtime == ''||note == ''){
+            res.status(400).json('all field is required')
+        }else{
+            let result = within30Minutes(leavingtime)
+            if(!result){
+                res.status(400).json('leaving time must be within 30 minutes')
+            }else{
+                
+                const journey = await Journey.create({to,leavingtime,note , userid : id , username : username , userage : age , usergender : gender , peoplejoined : [] , numberofpeoplejoined : 0})
+                const journeys = await Journey.find().sort({createdAt : -1})
+                res.status(200).json(journeys)
+            }
+        }
+    }
+    
+    
+    
+
 })
 
 
@@ -77,15 +149,20 @@ app.post('/api/signup' , async (req, res) => {
         }else{
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
-            const user = await JourneyUser.create({ username, age, gender, password: hashedPassword });
+            const user = await JourneyUser.create({ username, age, gender, password: hashedPassword , acceptedajourney : false});
             res.status(200).json(user);
         }
     }
 });
 
 
+
+
+
+
 //login
 app.post('/api/login' , async(req,res)=>{
+    const array = []
     const {username , password} = req.body
     
     if(username == "" || password == ''){
@@ -101,7 +178,9 @@ app.post('/api/login' , async(req,res)=>{
                 res.status(400).json('Password incorrect!!')
             }else{
                 const token = generateToken(user._id)
-                res.status(200).json(`${user.username} is logged in and is ${user.age} years old and token is ${token}`)
+                array.push(user.username)
+                array.push(token)
+                res.status(200).json(array)
             }
             }
         }

@@ -11,15 +11,21 @@ const Login = () =>{
 
 
     const navigate = useNavigate()
+
+    
     const Submit = (e) =>{
+
+
         e.preventDefault()
         axios.post('/api/login' , {
             username : username,
             password : password
         })
         .then((response)=>{
-            console.log(response)
-            navigate('/userdata')
+            console.log(response.data)
+            let token = response.data[1]
+            localStorage.setItem('token',token)
+            navigate('/userdata')    
         })
         .catch((error)=>{
             console.log(error.response)
