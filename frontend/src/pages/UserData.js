@@ -3,8 +3,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser,faPlus , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking  } from "@fortawesome/free-solid-svg-icons";
-
+import { faUser,faPlus , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking  } from "@fortawesome/free-solid-svg-icons";
+import Footer from '../components/Footer'
 
 
 const UserData = () =>{
@@ -55,9 +55,10 @@ const UserData = () =>{
             console.log(error)
         })
 
+
     },[])
-
-
+     
+    
 
 
     const createJourney = (e) =>{
@@ -128,6 +129,7 @@ const UserData = () =>{
 
         }
     }
+    
 
     const deleteJourney = (id) =>{
         let token = localStorage.getItem('token')
@@ -144,6 +146,22 @@ const UserData = () =>{
         })
     }
 
+    
+    const leavesIn = (time) =>{
+        let arr = time.split(':')
+        let date = new Date()
+        let date2 = new Date()
+        date2.setHours(arr[0])
+        date2.setMinutes(arr[1])
+        let diff = (date2 - date) / 60000
+        if(diff > 1){
+            return `leaves in ${diff} minutes` 
+        }else if(diff === 1){
+            return 'leaves in 1 minute' 
+        }
+    }
+
+
     return(
         <>
         <div className='top'>
@@ -151,9 +169,9 @@ const UserData = () =>{
             <FontAwesomeIcon className='user' icon={faUser}/>
             <p>Hi , {user && user.username[0].toUpperCase() + user.username.slice( 1 , user.username.length)}</p>
         </div>
-        <h1>Tbuddy</h1>
+        <p className='head'>T-Buddy</p>
         <div className='top3'>
-        <FontAwesomeIcon icon={faShareFromSquare} />
+        <FontAwesomeIcon icon={faShareFromSquare} className='sharefromsquare' />
         <button onClick={Logout}>Logout</button>
         </div>
         </div>
@@ -162,21 +180,31 @@ const UserData = () =>{
         <div className='top4'>
         <div className='sidebar'>
             <div className='slidebarinner1'>
-                <p>Profile</p>
+                <div>
+                    <p>Edit Profile</p>
+                </div> <hr></hr>
                 <p onClick={showjourney}><FontAwesomeIcon icon={faPlus} className='plus' /></p>
-                <p>Create Journey</p>
+                <p className='create'>Create Journey</p>
             </div>
-            {createjourney && <div className='form'>
-            <FontAwesomeIcon className='formlocationlogo'  icon={faLocationDot}/> <br></br>
-                <input type='text' placeholder='to' value={to} onChange={(e)=>{setTo(e.target.value)}} /> <br></br>
-                <p>leavingtime:</p>
+            { createjourney && <div className='form'>
+                <div className='formcontainer1'>
+                    <p className='formlocationlogo'><FontAwesomeIcon   icon={faLocationDot}/></p>
+                    <input type='text' placeholder='To' value={to} onChange={(e)=>{setTo(e.target.value)}} /> <br></br>
+                </div>
+                <div className='formcontainer2'>
+                <p>Leaving time:</p>
                 <input type='time' value={leavingtime} onChange={(e)=>{setLeavingTime(e.target.value)}} /> <br></br>
+                </div>
+                <div className='formcontainer3'>
+                <p className='messageicon'><FontAwesomeIcon  icon={faMessage}/></p>
                 <textarea value={note} onChange={(e)=>{setNote(e.target.value)}} placeholder='note'>
 
-                </textarea> <br></br>
+                </textarea>
+                </div> <br></br>
                 <p className='error'>{error}</p>
+                <div className='formcontainer4'>
                 <button onClick={createJourney}>Create Journey</button>
-
+                </div>
             </div>}
         </div>
         <div className='top5'>
@@ -197,7 +225,7 @@ const UserData = () =>{
                 </div>
                 <div className='leavingtime'>
                     <FontAwesomeIcon className='clock' icon={faClock}/>
-                    <p>{journey.leavingtime}</p>
+                    <p>{journey.leavingtime} , <span className='leaves'>{leavesIn(journey.leavingtime)}</span></p>
                 </div>
                 <div className='info'>
                 <FontAwesomeIcon className='personwalking' icon={faPersonWalking}/>
@@ -205,7 +233,7 @@ const UserData = () =>{
                 </div>
                 <div className='note'>
                 <FontAwesomeIcon icon={faMessage}/>
-                <p>"{journey.note}"</p>
+                <p>"{journey.note[0].toUpperCase() + journey.note.slice( 1 , journey.username.note)}"</p>
                 </div>
                 <div className='peoplejoined'>
                 <FontAwesomeIcon icon={faUsers}/>
@@ -213,9 +241,10 @@ const UserData = () =>{
                 </div>
 
             </div>
-        )) : <p className='nojourney'>No journey available</p>}
+        )) : <p className='nojourney'>No journey available <FontAwesomeIcon className='sadface' icon={faFaceFrown}/>        </p>}
         </div>
         </div>
+        <Footer />
         </>
     )
 }

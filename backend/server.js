@@ -35,7 +35,7 @@ const within30Minutes = (time) => {
     d1.setHours(timeArr[0])
     d1.setMinutes(timeArr[1])
     let diff = (d1 - d) / 60000
-    if(diff > 30){
+    if(diff > 30 || diff < 0){
         return false;
     }else{
         return true;
@@ -44,10 +44,30 @@ const within30Minutes = (time) => {
 
 //get all journey
 app.get('/api/alljourney',protect, async (req,res)=>{
+    const userid = req.user.id
 
-    const journey = await Journey.find().sort({createdAt : -1})
+
+    const userJourney = await Journey.findOne({userid})
+    const journeys = await Journey.find().sort({createdAt : -1})
+    for( i = 0;i<journeys.length ; i++){
+        let arr = journeys[i].leavingtime.split(':')
+        let date = new Date()
+        let date2 = new Date()
+        date2.setHours(arr[0])
+        date2.setMinutes(arr[1])
+        let diff = (date2 - date) / 60000
+        if(diff < 1){
+            let update = await Journey.findByIdAndDelete(journeys[i]._id)
+        }
+        
+    }
+    journeys.splice(0 , 0 , userJourney)
+    let lastIndex = journeys.map(JSON.stringify).lastIndexOf(JSON.stringify(userJourney));
+    journeys.splice(lastIndex , 1)
+    res.status(200).json(journeys)
+        
     
-    res.status(200).json(journey)
+    
     
 })
 
@@ -87,7 +107,7 @@ app.patch('/api/peoplejoined/:id', protect , async (req,res)=>{
 }})
 
 //leave a journey
-app.patch('/api/leavejourney/:id',protect , async(req,res)=>{
+app.patch('/api/leavejourney/:id', protect , async(req,res)=>{
     const id = req.params.id
     const userid = req.user.id
 
@@ -106,19 +126,23 @@ app.delete('/api/journey/:id', protect , async (req,res)=>{
 
     const id = req.params.id
 
-    const journey = await Journey.findByIdAndDelete(id)
-    let arr = journey.peoplejoined
-    if(arr.length > 0){
-    for(let i = 0;i<arr.length;i++){
-        const update = await JourneyUser.findByIdAndUpdate(arr[i] , {$set : {acceptedajourney : false}})
-    }
-    
-    const journeys = await Journey.find().sort({createdAt : -1})
-    res.status(200).json(journeys)
-    }else{
+    const journey = await Journey.findById(id)
+    if(!journey){
         const journeys = await Journey.find().sort({createdAt : -1})
         res.status(200).json(journeys) 
+    }else{
+        let arr = journey.peoplejoined
+        
+         if(arr.length > 0){
+        for(let i = 0;i<arr.length;i++){
+            const update = await JourneyUser.findByIdAndUpdate(arr[i] , {$set : {acceptedajourney : false}})
+        }
+        }
+        const deletejourney = await Journey.findByIdAndDelete(id)
+        const journeys = await Journey.find().sort({createdAt : -1})
+        res.status(200).json(journeys)
     }
+    
 })
 
 
@@ -137,11 +161,11 @@ app.post('/api/journey', protect , async(req,res)=>{
     }else{
         const {to , leavingtime , note} = req.body
         if(to == ''||leavingtime == ''||note == ''){
-            res.status(400).json('all field is required')
+            res.status(400).json('All field is required')
         }else{
             let result = within30Minutes(leavingtime)
             if(!result){
-                res.status(400).json('leaving time must be within 30 minutes')
+                res.status(400).json('Leaving time must be within the next 30 minutes')
             }else{
                 
                 const journey = await Journey.create({to,leavingtime,note , userid : id , username : username , userage : age , usergender : gender , peoplejoined : [] , numberofpeoplejoined : 0})

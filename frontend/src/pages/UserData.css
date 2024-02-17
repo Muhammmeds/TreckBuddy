@@ -17,10 +17,22 @@
     transition: all 0.3s ease-in-out;
     font-weight: 600;
     border: none;
+
+}
+.top .head{
+    font-family: "Protest Riot", sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+
 }
 
 .top button:hover{
-    transform: scale(1.2);
+    transform: scale(1.05);
+    outline: 3px solid  #00a35c;
+}
+
+.sharefromsquare {
+    color :  #00a35c;
 }
 
 .top2 {
@@ -29,14 +41,16 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
     /* border: 2px solid white; */
 }
 .user{
     font-size: 30px;
-}
-.top2{
-    font-size: 20px;
-    font-weight: 700;
+    color :  #00a35c;
+
 }
 
 .top3 {
@@ -54,7 +68,7 @@
 }
 
 .top4{
-    min-height: 70px ;
+    min-height: 700px ;
     /* border: 2px solid black; */
     display: flex;
     box-sizing: border-box;
@@ -84,10 +98,18 @@
     margin-top: 20px;
     margin-bottom: -10px;
     transition: all 0.3s ease-in;
+
 }
+.create{
+    font-size: 10px;
+}
+
+
 
 .slidebarinner1 .plus:hover{
     transform: scale(1.2);
+    color :  #00a35c;
+
 }
 
 .slidebarinner1 :nth-child(3){
@@ -96,12 +118,104 @@
 
 .form {
     border : 2px solid white;
-    min-height: 300px;
+    min-height: 400px;
     margin-top: 20px;
     width: 80%;
     background-color: white;
     color: black;
     border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+
+}
+.form .formcontainer1{
+    min-width: 25%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+.form .formcontainer1 .formlocationlogo{
+    font-size: 35px;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+.form  .formcontainer1 input{
+    height: 30px;
+    width: 80%;
+    border: 1px solid black;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+.form .formcontainer2{
+    min-height: 30px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    margin-top: -15px;
+
+}
+.form .formcontainer2 input{
+    width: 80%;
+    padding-left: 10px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.form .formcontainer2 :first-child{
+    text-align: left;
+    font-weight: 700;
+    font-size: 15px;
+}
+.form .formcontainer3{
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    margin-top: -15px;
+    min-height: 80px;
+
+
+}
+.form .formcontainer3 :first-child{
+    text-align:left;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-bottom: 9px;
+}
+
+.form .formcontainer3 textarea{
+    width: 80%;
+    padding-left: 5px;
+    padding-top: 10px;
+    min-height: 35px;
+}
+
+.form .formcontainer4{
+    min-height: 40px;
+
+}
+.form .formcontainer4 button{
+    width: 50%;
+    margin-left: -22px;
+    height: 35px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 50px;
+    font-weight: 550;
+    transition: 0.3s ease;
+}
+.form .formcontainer4 button:hover{
+    transform: scale(1.1);
+    border: 3px solid #00a35c;
+
+}
+
+.form .error{
+    color: red;
+    font-size: 12px;
+    margin-bottom: 20px;
 }
 
 .top6{
@@ -141,6 +255,8 @@
 
 .location button:hover{
     transform: scale(1.1);
+    outline: 3px solid  #00a35c;
+
 }
 
 .locationfirstcontainer .locationlogo {
@@ -160,6 +276,12 @@
 }
 .leavingtime p{
     margin-left: 10px;
+    display: inline;
+}
+.leaves{
+    font-family: "Protest Riot", sans-serif;
+    font-weight: 400;
+    display: inline;
 }
 .info{
     display: flex;
@@ -172,14 +294,7 @@
 .info .personwalking{
     font-size: 25px;
 }
-.form{
-    min-height: 300px;
-    transition: 0.3s ease-out;
-}
-.form .error{
-    color: red;
-    font-size: 10px;
-}
+
 .note{
     display: flex;
     align-items: center;
@@ -191,14 +306,18 @@
 
 .delete{
     font-size: 30px;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .delete:hover{
     transform: scale(1.2);
+    position: relative;
+    top: -4px;
 }
 
-
+.sadface{
+    color:  #00a35c;
+}
 .peoplejoined{
     display: flex;
     align-items: center;

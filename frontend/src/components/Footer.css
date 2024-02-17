@@ -2,6 +2,10 @@
     background-color:  black;
     color: white;
     height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .footercontainer p{
