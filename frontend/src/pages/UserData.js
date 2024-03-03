@@ -1,9 +1,9 @@
 import './UserData.css'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useState , useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser,faPlus , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking  } from "@fortawesome/free-solid-svg-icons";
+import { faUser,faPlus, faX, faPenToSquare , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking  } from "@fortawesome/free-solid-svg-icons";
 import Footer from '../components/Footer'
 
 
@@ -15,7 +15,11 @@ const UserData = () =>{
     const [note , setNote] = useState('')
     const [error , setError] = useState('')
     const [createjourney , setCreateJourney] = useState(false)
+    const [showNote , setShowNote] = useState(true)
+    const [inputValue , setInputValue] = useState('')
+    const [updateButton , setUpdateButton] = useState(true)
 
+    const inputRef = useRef(null)
 
     const navigate = useNavigate()
 
@@ -50,14 +54,17 @@ const UserData = () =>{
             console.log(response.data)
             setJourney(response.data)
             
+
+            
         })
         .catch((error)=>{
             console.log(error)
         })
 
-
     },[])
      
+
+    
     
 
 
@@ -160,6 +167,43 @@ const UserData = () =>{
             return 'leaves in 1 minute' 
         }
     }
+    const Edit = () =>{
+        inputRef.current.focus()
+        inputRef.current.value = setInputValue(inputValue.concat(inputRef.current.value))
+        setShowNote(false)
+        setUpdateButton(false)
+    }
+
+    const handleClick = (e) =>{
+        setInputValue(e.target.value)
+    }
+
+    const Cancel = () =>{
+        setUpdateButton(true)
+        setShowNote(true)
+        setInputValue('')
+    }
+
+    const UpdateNote = (id) =>{
+        let token = localStorage.getItem('token')
+
+        axios.patch(`/api/updatenote/${id}` , { update : inputValue } , {headers : {
+            Authorization : `Bearer ${token}`
+        }})
+        .then((response)=>{
+            setJourney(response.data)
+            
+        setUpdateButton(true)
+        setShowNote(true)
+        setInputValue('')
+            
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+
+
 
 
     return(
@@ -233,7 +277,9 @@ const UserData = () =>{
                 </div>
                 <div className='note'>
                 <FontAwesomeIcon icon={faMessage}/>
-                <p>"{journey.note[0].toUpperCase() + journey.note.slice( 1 , journey.username.note)}"</p>
+                <>
+                {user._id === journey.userid ? (<p><input className='noteinput' onChange={handleClick} ref={inputRef} value ={showNote ? journey.note[0].toUpperCase() + journey.note.slice( 1 , journey.note.length) : inputValue } />{updateButton ? <span onClick={()=>Edit()} className='pentosquare'><FontAwesomeIcon  icon={faPenToSquare}/></span> : <><button className='noteupdate' onClick={()=>UpdateNote(journey._id)}>update</button><span onClick={Cancel}><FontAwesomeIcon className='notecancel'   icon={faX}/></span></>}</p>) : (<p>{journey.note[0].toUpperCase() + journey.note.slice( 1 , journey.note.length)}</p>)}
+                </>
                 </div>
                 <div className='peoplejoined'>
                 <FontAwesomeIcon icon={faUsers}/>

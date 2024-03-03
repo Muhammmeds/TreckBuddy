@@ -49,6 +49,8 @@ app.get('/api/alljourney',protect, async (req,res)=>{
 
     const userJourney = await Journey.findOne({userid})
     const journeys = await Journey.find().sort({createdAt : -1})
+
+
     for( i = 0;i<journeys.length ; i++){
         let arr = journeys[i].leavingtime.split(':')
         let date = new Date()
@@ -57,18 +59,22 @@ app.get('/api/alljourney',protect, async (req,res)=>{
         date2.setMinutes(arr[1])
         let diff = (date2 - date) / 60000
         if(diff < 1){
-            let update = await Journey.findByIdAndDelete(journeys[i]._id)
+            let arr2 = journeys[i].peoplejoined
+            if(arr2.length > 0){
+                for(j=0;j<arr2.length;j++){
+                    let update = await JourneyUser.findByIdAndUpdate(arr2[j] , {$set : {acceptedajourney : false}} )
+                }
+            }
+            let update2 = await Journey.findByIdAndDelete(journeys[i]._id)
         }
         
     }
-    journeys.splice(0 , 0 , userJourney)
-    let lastIndex = journeys.map(JSON.stringify).lastIndexOf(JSON.stringify(userJourney));
-    journeys.splice(lastIndex , 1)
+    if(userJourney){
+        journeys.splice(0 , 0 , userJourney)
+        let lastIndex = journeys.map(JSON.stringify).lastIndexOf(JSON.stringify(userJourney));
+        journeys.splice(lastIndex , 1)
+    }
     res.status(200).json(journeys)
-        
-    
-    
-    
 })
 
 //get a user
@@ -80,8 +86,27 @@ app.get('/api/users', protect , async (req,res)=>{
 //get each user all journey
 app.get('/api/eachuserjourney',protect, async (req,res)=>{
     const id = req.user.id
-    const journey = await Journey.find({userid : id}).sort({createdAt : -1})
+    const journey = await Journey.findOne({userid : id})
     res.status(200).json(journey)
+})
+
+//update note
+app.patch('/api/updatenote/:id' , protect , async (req,res)=>{
+    let userid = req.user.id
+    let id = req.params.id
+    const {update} = req.body
+
+    const update2 = await Journey.findByIdAndUpdate(id , {$set : {note : update}})
+    const journeys = await Journey.find().sort({createdAt : -1})
+    const userJourney = await Journey.findOne({userid})
+
+    
+    if(userJourney){
+        journeys.splice(0 , 0 , userJourney)
+        let lastIndex = journeys.map(JSON.stringify).lastIndexOf(JSON.stringify(userJourney));
+        journeys.splice(lastIndex , 1)
+    }
+    res.status(200).json(journeys)
 })
 
 // people joined
@@ -201,9 +226,6 @@ app.post('/api/signup' , async (req, res) => {
         }
     }
 });
-
-
-
 
 
 
