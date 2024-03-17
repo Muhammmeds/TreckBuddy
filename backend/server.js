@@ -83,6 +83,13 @@ app.get('/api/users', protect , async (req,res)=>{
     res.status(200).json(user)
 })
 
+//get user profile
+app.get('/api/profile/:id' , protect , async(req,res)=>{
+    const {id} = req.params
+    const profile = await JourneyUser.findById(id)
+    res.status(200).json(profile)
+})
+
 //get each user all journey
 app.get('/api/eachuserjourney',protect, async (req,res)=>{
     const id = req.user.id

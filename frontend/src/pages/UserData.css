@@ -85,6 +85,7 @@
     flex-direction: column;
     text-align: center;
     align-items: center;
+    padding-top: 30px;
 }
 .top5{
     width: 70%;
@@ -99,6 +100,16 @@
     margin-bottom: -10px;
     transition: all 0.3s ease-in;
 
+}
+.slidebarinner1 a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease-in;
+
+}
+.slidebarinner1 a:hover{
+    color: #00a35c;
 }
 .create{
     font-size: 10px;
@@ -291,6 +302,22 @@
 .info p{
     margin-left: 10px ;
 }
+.info a{
+    font-size: 10px;
+    margin-left: 20px;
+    text-decoration: none;
+    padding: 5px 7px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    background-color: black;
+    transition: all 0.3s ease-in;
+    letter-spacing: 0.9px;
+
+}
+.info a:hover{
+    color: #00a35c;
+}
 .info .personwalking{
     font-size: 25px;
 }
@@ -303,10 +330,12 @@
 }
 .note p{
     margin-left: 10px;
+    min-width:70px ;
 }
 
 .noteinput{
     border: none;
+    min-width: 60px;
 }
 .noteupdate{
     margin-left: 20px;

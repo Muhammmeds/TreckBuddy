@@ -1,7 +1,7 @@
 import './UserData.css'
 import axios from 'axios'
 import { useEffect, useState , useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate , Link } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser,faPlus, faX, faPenToSquare , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking  } from "@fortawesome/free-solid-svg-icons";
 import Footer from '../components/Footer'
@@ -208,6 +208,7 @@ const UserData = () =>{
 
     return(
         <>
+        {user &&
         <div className='top'>
         <div className='top2'>
             <FontAwesomeIcon className='user' icon={faUser}/>
@@ -219,13 +220,13 @@ const UserData = () =>{
         <button onClick={Logout}>Logout</button>
         </div>
         </div>
+        }
 
-
-        <div className='top4'>
+        {user && <div className='top4'>
         <div className='sidebar'>
             <div className='slidebarinner1'>
                 <div>
-                    <p>Edit Profile</p>
+                    <Link to = {user && `/profile/${user._id}`}>Edit Profile</Link>
                 </div> <hr></hr>
                 <p onClick={showjourney}><FontAwesomeIcon icon={faPlus} className='plus' /></p>
                 <p className='create'>Create Journey</p>
@@ -251,6 +252,7 @@ const UserData = () =>{
                 </div>
             </div>}
         </div>
+        
         <div className='top5'>
         { journey.length > 0 ? journey.map((journey, index)=>(
             
@@ -273,7 +275,7 @@ const UserData = () =>{
                 </div>
                 <div className='info'>
                 <FontAwesomeIcon className='personwalking' icon={faPersonWalking}/>
-                <p>{journey.username[0].toUpperCase() + journey.username.slice( 1 , journey.username.length)} - {journey.userage} - {journey.usergender} </p>
+                <p>{journey.username[0].toUpperCase() + journey.username.slice( 1 , journey.username.length)} - {journey.userage} - {journey.usergender} {user._id !== journey.userid ? <Link to = {`/profile/${journey.userid}`}>view profile</Link> : <></>} </p>
                 </div>
                 <div className='note'>
                 <FontAwesomeIcon icon={faMessage}/>
@@ -290,7 +292,10 @@ const UserData = () =>{
         )) : <p className='nojourney'>No journey available <FontAwesomeIcon className='sadface' icon={faFaceFrown}/>        </p>}
         </div>
         </div>
+        }
+        {user &&
         <Footer />
+        }
         </>
     )
 }
