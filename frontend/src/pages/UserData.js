@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useEffect, useState , useRef } from 'react'
 import { useNavigate , Link } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser,faPlus, faX, faPenToSquare , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking  } from "@fortawesome/free-solid-svg-icons";
+import { faUser,faPlus, faX, faPenToSquare , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking , faSpinner  } from "@fortawesome/free-solid-svg-icons";
 import Footer from '../components/Footer'
 
 
@@ -18,6 +18,7 @@ const UserData = () =>{
     const [showNote , setShowNote] = useState(true)
     const [inputValue , setInputValue] = useState('')
     const [updateButton , setUpdateButton] = useState(true)
+    const [isLoading , setIsLoading] = useState(true)
 
     const inputRef = useRef(null)
 
@@ -26,6 +27,7 @@ const UserData = () =>{
     const Logout = (e) =>{
         e.preventDefault()
         localStorage.clear('token')
+        localStorage.clear('userid')
         navigate('/')
 
     }
@@ -53,6 +55,7 @@ const UserData = () =>{
         .then((response)=>{
             console.log(response.data)
             setJourney(response.data)
+            setIsLoading(false)
             
 
             
@@ -226,7 +229,7 @@ const UserData = () =>{
         <div className='sidebar'>
             <div className='slidebarinner1'>
                 <div>
-                    <Link to = {user && `/profile/${user._id}`}>Edit Profile</Link>
+                    <Link to = {`/profile/${user._id}`}>Edit Profile</Link>
                 </div> <hr></hr>
                 <p onClick={showjourney}><FontAwesomeIcon icon={faPlus} className='plus' /></p>
                 <p className='create'>Create Journey</p>
@@ -254,7 +257,7 @@ const UserData = () =>{
         </div>
         
         <div className='top5'>
-        { journey.length > 0 ? journey.map((journey, index)=>(
+        { journey.length > 0 && !isLoading ? (journey.map((journey, index)=>(
             
             <div key={index} className='top6'>
                 <div className='location'>
@@ -289,7 +292,7 @@ const UserData = () =>{
                 </div>
 
             </div>
-        )) : <p className='nojourney'>No journey available <FontAwesomeIcon className='sadface' icon={faFaceFrown}/>        </p>}
+        ))) : !journey.length && isLoading ? (<p className='nojourney'><FontAwesomeIcon className='loadingspinner' icon={faSpinner}/></p>) : !journey.length && !isLoading ? (<p className='nojourney'>No journey available <FontAwesomeIcon className='sadface' icon={faFaceFrown}/>        </p>) : null}
         </div>
         </div>
         }

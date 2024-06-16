@@ -72,7 +72,7 @@
     align-self: flex-start;
 }
 
-.container2 input {
+.container2 input:nth-of-type(1),.container2 input:nth-of-type(2) ,.container2 input:nth-of-type(3) {
     color: white;
     border: none;
     background-color: gray;
@@ -122,4 +122,24 @@
     font-size: 12px;
     color: #F01F17;
     font-weight: 600;
+}
+
+.file{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file label{
+    margin-bottom: 18px;
+    margin-left: -5px;
+    color: gainsboro;
+
+}
+.file input{
+    height: 20px !important;
+    margin-top: 7px !important;
+    padding-left: 20px !important;
+    width: 75% !important; 
 }

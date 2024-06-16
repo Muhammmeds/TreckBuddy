@@ -24,7 +24,10 @@ const Login = () =>{
         .then((response)=>{
             console.log(response.data)
             let token = response.data[1]
+            let userid = response.data[2]
             localStorage.setItem('token', token)
+            localStorage.setItem('userid', userid)
+
             navigate('/userdata')    
         })
         .catch((error)=>{

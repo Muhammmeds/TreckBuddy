@@ -8,6 +8,7 @@ const Profile = () =>{
     const [user , setUser] = useState(null)
 
     const {id} = useParams()
+    const userid = localStorage.getItem('userid')
 
 
     useEffect(()=>{
@@ -30,6 +31,10 @@ const Profile = () =>{
         { user && 
         <>
         <Navbar/>
+        <div>
+        <img  alt='' width={300} height={300} src={user.image} />
+        </div>
+        {userid === id ? <p>Can be edited</p> : <><p>Cannot be edited</p></>}
         <p>{user.username}</p>
         <p>{user.age}</p>
         <p>{user.gender}</p>

@@ -380,17 +380,24 @@
 
 .delete{
     font-size: 30px;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .delete:hover{
     transform: scale(1.2);
+    color: #00a35c;
     position: relative;
     top: -4px;
 }
 
 .sadface{
     color:  #00a35c;
+}
+.loadingspinner{
+    font-size: 50px;
+    font-weight: 900;
+    color: #00a35c;
+
 }
 .peoplejoined{
     display: flex;

@@ -9,8 +9,7 @@ const protect = require('./authentication')
 
 
 const app = express()
-app.use(express.json())
-
+app.use(express.json({limit: '50mb'}));
 
 const generateToken = (id) =>{
     return jwt.sign({id}, process.env.SECRET_KEY , {expiresIn : '30d'})
@@ -189,7 +188,7 @@ app.post('/api/journey', protect , async(req,res)=>{
     const exist = await Journey.findOne({userid : id})
 
     if(exist || user.acceptedajourney){
-        res.status(400).json('You have an existing journey')
+        res.status(400).json('You have an existing journey!!')
     }else{
         const {to , leavingtime , note} = req.body
         if(to == ''||leavingtime == ''||note == ''){
@@ -215,9 +214,9 @@ app.post('/api/journey', protect , async(req,res)=>{
 
 //signup
 app.post('/api/signup' , async (req, res) => {
-    const { username, age, gender, password } = req.body;
+    const { username, age, gender, password , image } = req.body;
 
-    if (username == '' || age == '' || gender == '' || password == '') {
+    if (username == '' || age == '' || gender == '' || password == ''|| image == '') {
         res.status(400).json('All field is required!');
     }else if(password.length < 8){
         res.status(400).json('password must not be less than 8 characters!');
@@ -228,7 +227,7 @@ app.post('/api/signup' , async (req, res) => {
         }else{
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
-            const user = await JourneyUser.create({ username, age, gender, password: hashedPassword , acceptedajourney : false});
+            const user = await JourneyUser.create({ username, age, gender, image , password: hashedPassword , acceptedajourney : false});
             res.status(200).json(user);
         }
     }
@@ -256,6 +255,7 @@ app.post('/api/login' , async(req,res)=>{
                 const token = generateToken(user._id)
                 array.push(user.username)
                 array.push(token)
+                array.push(user._id)
                 res.status(200).json(array)
             }
             }
