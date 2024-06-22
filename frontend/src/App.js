@@ -8,6 +8,9 @@ import UserData from './pages/UserData';
 import Profile from './pages/Profile';
 
 function App() {
+
+  let token = localStorage.getItem('token')
+  console.log('good' , token)
   
   
   return (
@@ -16,9 +19,12 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={ <Login/>} />
+        <Route path= { "/login"}  element={<Login />}/>
         <Route path="/signupconfirmed" element={<Signupconfirmed />} />
-        <Route path="/userdata" element={<UserData />}/>
+        <Route
+          path="/userdata/:id"
+          element={<UserData />}
+        />        
         <Route path="/profile/:id" element={<Profile />} />
       </Routes>
     </BrowserRouter>

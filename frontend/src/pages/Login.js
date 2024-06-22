@@ -27,8 +27,9 @@ const Login = () =>{
             let userid = response.data[2]
             localStorage.setItem('token', token)
             localStorage.setItem('userid', userid)
+            console.log('good' , localStorage.getItem('token'))
 
-            navigate('/userdata')    
+            navigate(`/userdata/${userid}`)    
         })
         .catch((error)=>{
             console.log(error.response)

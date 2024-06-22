@@ -278,7 +278,7 @@ const UserData = () =>{
                 </div>
                 <div className='info'>
                 <FontAwesomeIcon className='personwalking' icon={faPersonWalking}/>
-                <p>{journey.username[0].toUpperCase() + journey.username.slice( 1 , journey.username.length)} - {journey.userage} - {journey.usergender} {user._id !== journey.userid ? <Link to = {`/profile/${journey.userid}`}>view profile</Link> : <></>} </p>
+                <p>{journey.username[0].toUpperCase() + journey.username.slice( 1 , journey.username.length)} - {journey.userage} - {journey.usergender} {user._id !== journey.userid ? <Link to = {`/profile/${journey.userid}`}>view profile</Link> : null} </p>
                 </div>
                 <div className='note'>
                 <FontAwesomeIcon icon={faMessage}/>
