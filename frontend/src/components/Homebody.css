@@ -59,7 +59,7 @@
     } 
     .container .inner1 {
         position: absolute;
-        top: 90px;
+        top: 80px;
         left: 20px;
         padding-left: 20px;
     }
@@ -70,7 +70,7 @@
     font-weight: 600;
     width: fit-content;
     margin-top: 20px;
-    font-size: 15px;
+    font-size: 12px;
     }
     .inner1 :nth-child(4){
         margin-left: 0;
@@ -79,6 +79,9 @@
         font-size: 20px;
         font-weight: bold;
         margin-top: -10px;
-        margin-bottom: 50px;
+        margin-bottom: 80px;
+    }
+    .inner1 a:hover{
+        outline: none;
     }
   }

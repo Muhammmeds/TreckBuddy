@@ -8,8 +8,8 @@ const Homebody = () =>{
         <div className="container">
             <img src={pic} alt='pic' />
             <div className='inner1'>
-                <p><span>A</span>re you a Loner in college??</p>
-                <p>Lets find you a Trek <br></br> buddy!!</p>
+                <p><span>D</span>o you want to make friends in college??</p>
+                <p>Lets find you a trek <br></br> buddy!!</p>
                 <Link to='/signup'>Signup</Link>
                 <Link to='/login'>Login</Link>
 

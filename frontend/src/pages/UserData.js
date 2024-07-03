@@ -28,9 +28,12 @@ const UserData = () =>{
 
     const Logout = (e) =>{
         e.preventDefault()
-        localStorage.clear('token')
-        localStorage.clear('userid')
-        navigate('/')
+        if(window.confirm('Are you sure you want to logout?')){
+            localStorage.clear('token')
+            localStorage.clear('userid')
+            navigate('/')
+        }
+     
 
     }
 
@@ -76,23 +79,35 @@ const UserData = () =>{
     const createJourney = (e) =>{
         let token = localStorage.getItem('token')
 
+
         e.preventDefault()
-        axios.post('/api/journey', {to,leavingtime , note},{headers : {
-            Authorization : `Bearer ${token}`,
-            "Content-Type" : "application/json"
-        }})
-        .then((response)=>{
-            console.log(response.data)
-            setJourney(response.data)
-            setTo('')
-            setLeavingTime('')
-            setNote('')
-            setError('')
-        })
-        .catch((error)=>{
-            console.log(error.response)
-            setError(error.response.data)
-        })
+                axios.post('/api/journey', {to,leavingtime , note},{headers : {
+                    Authorization : `Bearer ${token}`,
+                    "Content-Type" : "application/json"
+                }})
+                .then((response)=>{
+                    if(response.status === 200 && window.confirm('Are you sure you want to create this journey') ){
+                        console.log(response.data)
+                        setJourney(response.data)
+                        setTo('')
+                        setLeavingTime('')
+                        setNote('')
+                        setError('')
+                        setIsMenuVisible(false)
+                    }
+                          
+                })
+                .catch((error)=>{
+                    setTo('')
+                    setLeavingTime('')
+                    setNote('')
+                    setError('')
+                    console.log(error.response)
+                    setError(error.response.data)
+                })
+    
+            
+       
     }
 
 
@@ -142,16 +157,18 @@ const UserData = () =>{
     const deleteJourney = (id) =>{
         let token = localStorage.getItem('token')
 
-
-        axios.delete(`/api/journey/${id}`, {headers : {
-            Authorization : `Bearer ${token}`
-        }})
-        .then((response)=>{
-            setJourney(response.data)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+        if(window.confirm('Are you sure you want to delete this journey?')){
+            axios.delete(`/api/journey/${id}`, {headers : {
+                Authorization : `Bearer ${token}`
+            }})
+            .then((response)=>{
+                setJourney(response.data)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+      
     }
 
     
@@ -163,9 +180,9 @@ const UserData = () =>{
         date2.setMinutes(arr[1])
         let diff = (date2 - date) / 60000
         if(diff > 1){
-            return `leaves in ${diff} minutes` 
+            return `expires in ${diff} minutes` 
         }else if(diff === 1){
-            return 'leaves in 1 minute' 
+            return 'expires in 1 minute' 
         }
     }
     const Edit = () =>{
@@ -292,8 +309,16 @@ const UserData = () =>{
           <div className='info'>
             <FontAwesomeIcon className='personwalking' icon={faPersonWalking} />
             <p>
-              {journey.username[0].toUpperCase() + journey.username.slice(1)} - {journey.userage} - {journey.usergender} {user._id !== journey.userid ? <Link to={`/profile/${journey.userid}`}>view profile</Link> : null}
+            {user._id !== journey.userid ? (
+            <>
+            {journey.username[0].toUpperCase() + journey.username.slice(1)} - {journey.userage} - {journey.usergender} 
+                <Link to={`/profile/${journey.userid}`}> view profile</Link>
+            </>
+            ) : (
+            'Me'
+            )}
             </p>
+
           </div>
           <div className='note'>
             <FontAwesomeIcon icon={faMessage} />

@@ -186,13 +186,15 @@ app.post('/api/journey', protect , async(req,res)=>{
 
     const user = await JourneyUser.findById(id)
     const exist = await Journey.findOne({userid : id})
+    const {to , leavingtime , note} = req.body
 
-    if(exist || user.acceptedajourney){
-        res.status(400).json('You have an existing journey!!')
+
+
+    if(to == ''||leavingtime == ''||note == ''){
+        res.status(400).json('All field is required!!')
     }else{
-        const {to , leavingtime , note} = req.body
-        if(to == ''||leavingtime == ''||note == ''){
-            res.status(400).json('All field is required')
+        if(exist || user.acceptedajourney){
+            res.status(400).json('You have an existing journey!!')
         }else{
             let result = within30Minutes(leavingtime)
             if(!result){
