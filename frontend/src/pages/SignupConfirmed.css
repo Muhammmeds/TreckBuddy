@@ -22,3 +22,12 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+@media only screen and (max-width: 600px){
+    .container6{
+        width: 65vw;
+    }
+    .container6 a{
+        font-size: 15px;
+    }
+}

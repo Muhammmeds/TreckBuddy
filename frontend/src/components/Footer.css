@@ -12,3 +12,12 @@
     font-weight: bold;
     font-size: 20px;
 }
+
+@media only screen and (max-width: 600px){
+    .footercontainer p{
+        font-size: 15px;
+    }
+    .footercontainer{
+        height: 45px;
+    }
+}

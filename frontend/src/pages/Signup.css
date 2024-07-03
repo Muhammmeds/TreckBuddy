@@ -144,3 +144,17 @@
     padding-left: 20px !important;
     width: 75% !important; 
 }
+
+
+@media only screen and (max-width: 600px){
+    .container2{
+        width: 65vw;
+    }
+    .container2 .already{
+        margin-top: 15px;
+    }
+    .container2 input{
+        font-weight: 800;
+        font-size: 12px;
+    }
+}

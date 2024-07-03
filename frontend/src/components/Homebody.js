@@ -9,7 +9,7 @@ const Homebody = () =>{
             <img src={pic} alt='pic' />
             <div className='inner1'>
                 <p><span>A</span>re you a Loner in college??</p>
-                <p>Lets find you a Trek buddy!!</p>
+                <p>Lets find you a Trek <br></br> buddy!!</p>
                 <Link to='/signup'>Signup</Link>
                 <Link to='/login'>Login</Link>
 

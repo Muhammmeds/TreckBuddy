@@ -13,3 +13,12 @@ nav p{
     font-family: "Protest Riot", sans-serif;
 
 }
+
+@media only screen and (max-width: 600px) {
+    nav p{
+        font-size: 30px;
+    }
+    nav{
+        height: 50px;
+    }
+  }

@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useEffect, useState , useRef } from 'react'
 import { useNavigate , Link } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser,faPlus, faX, faPenToSquare , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking , faSpinner  } from "@fortawesome/free-solid-svg-icons";
+import { faUser,faPlus, faX, faPenToSquare , faFaceFrown , faShareFromSquare,faUsers , faMessage , faLocationDot , faTrash , faClock , faPersonWalking , faSpinner ,faBars  } from "@fortawesome/free-solid-svg-icons";
 import Footer from '../components/Footer'
 
 
@@ -14,11 +14,13 @@ const UserData = () =>{
     const [leavingtime , setLeavingTime] = useState('')
     const [note , setNote] = useState('')
     const [error , setError] = useState('')
-    const [createjourney , setCreateJourney] = useState(false)
+    const [createJourneyVisible, setCreateJourneyVisible] = useState(false);
     const [showNote , setShowNote] = useState(true)
     const [inputValue , setInputValue] = useState('')
     const [updateButton , setUpdateButton] = useState(true)
     const [isLoading , setIsLoading] = useState(true)
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
+
 
     const inputRef = useRef(null)
 
@@ -132,12 +134,8 @@ const UserData = () =>{
     }
 
     const showjourney = () =>{
-        if(!createjourney){
-            setCreateJourney(true)
-        }else{
-            setCreateJourney(false)
 
-        }
+        setCreateJourneyVisible(!createJourneyVisible);
     }
     
 
@@ -206,6 +204,10 @@ const UserData = () =>{
         })
     }
 
+    const showSideBar = () =>{
+        setIsMenuVisible(!isMenuVisible)
+    }
+
 
 
 
@@ -221,20 +223,24 @@ const UserData = () =>{
         <div className='top3'>
         <FontAwesomeIcon icon={faShareFromSquare} className='sharefromsquare' />
         <button onClick={Logout}>Logout</button>
+        <FontAwesomeIcon icon={!isMenuVisible ? faBars : faX} onClick={showSideBar} className='bars' />
+
         </div>
         </div>
         }
 
         {user && <div className='top4'>
-        <div className='sidebar'>
+            <div className={`sidebar ${isMenuVisible ? 'show' : ''}`}>
             <div className='slidebarinner1'>
                 <div>
                     <Link to = {`/profile/${user._id}`}>Edit Profile</Link>
                 </div> <hr></hr>
-                <p onClick={showjourney}><FontAwesomeIcon icon={faPlus} className='plus' /></p>
+                <button onClick={Logout} className='logoutsidebar'>Logout</button> <hr></hr>
+
+                <p onClick={showjourney}><FontAwesomeIcon icon={!createJourneyVisible?faPlus : faX} className='plus' /></p>
                 <p className='create'>Create Journey</p>
             </div>
-            { createjourney && <div className='form'>
+            { createJourneyVisible && <div className='form'>
                 <div className='formcontainer1'>
                     <p className='formlocationlogo'><FontAwesomeIcon   icon={faLocationDot}/></p>
                     <input type='text' placeholder='To' value={to} onChange={(e)=>{setTo(e.target.value)}} /> <br></br>
@@ -257,42 +263,77 @@ const UserData = () =>{
         </div>
         
         <div className='top5'>
-        { journey.length > 0 && !isLoading ? (journey.map((journey, index)=>(
-            
-            <div key={index} className='top6'>
-                <div className='location'>
-                    <div  className='locationfirstcontainer'>
-                        <FontAwesomeIcon className='locationlogo'  icon={faLocationDot}/>
-                        <p>{journey.to}</p>
-                    </div>
-                    <div>
-                        {user._id !== journey.userid && !journey.peoplejoined.includes(user._id) ? (<button  onClick={()=>peoplejoined(journey._id)}>Accept</button> ) :
-                        (
-                            user._id !== journey.userid && journey.peoplejoined.includes(user._id)) ? (<button onClick={()=>{leavejourney(journey._id)}}>Leave</button>) : <FontAwesomeIcon className='delete' onClick={()=> deleteJourney(journey._id)} icon={faTrash}  />
-                        }
-                    </div>
-                </div>
-                <div className='leavingtime'>
-                    <FontAwesomeIcon className='clock' icon={faClock}/>
-                    <p>{journey.leavingtime} , <span className='leaves'>{leavesIn(journey.leavingtime)}</span></p>
-                </div>
-                <div className='info'>
-                <FontAwesomeIcon className='personwalking' icon={faPersonWalking}/>
-                <p>{journey.username[0].toUpperCase() + journey.username.slice( 1 , journey.username.length)} - {journey.userage} - {journey.usergender} {user._id !== journey.userid ? <Link to = {`/profile/${journey.userid}`}>view profile</Link> : null} </p>
-                </div>
-                <div className='note'>
-                <FontAwesomeIcon icon={faMessage}/>
-                <>
-                {user._id === journey.userid ? (<p><input className='noteinput' onChange={handleClick} ref={inputRef} value ={showNote ? journey.note[0].toUpperCase() + journey.note.slice( 1 , journey.note.length) : inputValue } />{updateButton ? <span onClick={()=>Edit()} className='pentosquare'><FontAwesomeIcon  icon={faPenToSquare}/></span> : <><button className='noteupdate' onClick={()=>UpdateNote(journey._id)}>update</button><span onClick={Cancel}><FontAwesomeIcon className='notecancel'   icon={faX}/></span></>}</p>) : (<p>{journey.note[0].toUpperCase() + journey.note.slice( 1 , journey.note.length)}</p>)}
-                </>
-                </div>
-                <div className='peoplejoined'>
-                <FontAwesomeIcon icon={faUsers}/>
-                    <p>{journey.numberofpeoplejoined}</p>
-                </div>
-
+        {
+        !isMenuVisible ? (
+    journey.length > 0 && !isLoading ? (
+      journey.map((journey, index) => (
+        <div key={index} className='top6'>
+          <div className='location'>
+            <div className='locationfirstcontainer'>
+              <FontAwesomeIcon className='locationlogo' icon={faLocationDot} />
+              <p>{journey.to}</p>
             </div>
-        ))) : !journey.length && isLoading ? (<p className='nojourney'><FontAwesomeIcon className='loadingspinner' icon={faSpinner}/></p>) : !journey.length && !isLoading ? (<p className='nojourney'>No journey available <FontAwesomeIcon className='sadface' icon={faFaceFrown}/>        </p>) : null}
+            <div>
+              {user._id !== journey.userid && !journey.peoplejoined.includes(user._id) ? (
+                <button onClick={() => peoplejoined(journey._id)}>Accept</button>
+              ) : (
+                user._id !== journey.userid && journey.peoplejoined.includes(user._id) ? (
+                  <button onClick={() => leavejourney(journey._id)}>Leave</button>
+                ) : (
+                  <FontAwesomeIcon className='delete' onClick={() => deleteJourney(journey._id)} icon={faTrash} />
+                )
+              )}
+            </div>
+          </div>
+          <div className='leavingtime'>
+            <FontAwesomeIcon className='clock' icon={faClock} />
+            <p>{journey.leavingtime}, <span className='leaves'>{leavesIn(journey.leavingtime)}</span></p>
+          </div>
+          <div className='info'>
+            <FontAwesomeIcon className='personwalking' icon={faPersonWalking} />
+            <p>
+              {journey.username[0].toUpperCase() + journey.username.slice(1)} - {journey.userage} - {journey.usergender} {user._id !== journey.userid ? <Link to={`/profile/${journey.userid}`}>view profile</Link> : null}
+            </p>
+          </div>
+          <div className='note'>
+            <FontAwesomeIcon icon={faMessage} />
+            <>
+              {user._id === journey.userid ? (
+                <p>
+                  <input
+                    className='noteinput'
+                    onChange={handleClick}
+                    ref={inputRef}
+                    value={showNote ? journey.note[0].toUpperCase() + journey.note.slice(1) : inputValue}
+                  />
+                  {updateButton ? (
+                    <span onClick={() => Edit()} className='pentosquare'><FontAwesomeIcon icon={faPenToSquare} /></span>
+                  ) : (
+                    <>
+                      <button className='noteupdate' onClick={() => UpdateNote(journey._id)}>update</button>
+                      <span onClick={Cancel}><FontAwesomeIcon className='notecancel' icon={faX} /></span>
+                    </>
+                  )}
+                </p>
+              ) : (
+                <p>{journey.note[0].toUpperCase() + journey.note.slice(1)}</p>
+              )}
+            </>
+          </div>
+          <div className='peoplejoined'>
+            <FontAwesomeIcon icon={faUsers} />
+            <p>{journey.numberofpeoplejoined}</p>
+          </div>
+        </div>
+      ))
+    ) : !journey.length && isLoading ? (
+      <p className='nojourney'><FontAwesomeIcon className='loadingspinner' icon={faSpinner} /></p>
+    ) : !journey.length && !isLoading ? (
+      <p className='nojourney'>No journey available <FontAwesomeIcon className='sadface' icon={faFaceFrown} /></p>
+    ) : null
+  ) : null
+}
+
         </div>
         </div>
         }
